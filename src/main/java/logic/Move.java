@@ -37,4 +37,3 @@ public class Move {
         counterOfOptions = count;
     }
 }
-
