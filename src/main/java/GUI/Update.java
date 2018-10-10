@@ -1,6 +1,5 @@
 package main.java.GUI;
 
-
 import main.java.logic.Move;
 
 import javax.swing.*;
@@ -30,7 +29,7 @@ public class Update {
                     gameBoard[x][y].setEnabled(true);
                     gameBoard[x][y].setText("");
                     if (moves.get(x + "," + y) != null) {
-                        gameBoard[x][y].setText(moves.get(x + "," + y).optionsCount + "");
+                        gameBoard[x][y].setText(moves.get(x + "," + y).counterOfOptions + "");
                     }
                 }
             }
