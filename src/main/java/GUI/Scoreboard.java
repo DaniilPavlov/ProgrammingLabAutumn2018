@@ -11,23 +11,23 @@ public class Scoreboard extends JPanel {
 
     public Scoreboard() {
         playerStyle = new JLabel("", JLabel.CENTER);
+        playerStyle.setBackground(Color.GREEN);
         add(playerStyle);
         JLabel nameOfGameStyle = new JLabel("Reversi");
         nameOfGameStyle.setFont(new Font("Dialog", Font.BOLD | Font.PLAIN, 30));
         add(nameOfGameStyle);
         computerStyle = new JLabel("", JLabel.CENTER);
+        computerStyle.setBackground(Color.GREEN);
         add(computerStyle);
     }
 
     public void currentScore(int[][] gameMatrix, int numberOfTurn) {
         if (numberOfTurn % 2 == 0) {
-            computerStyle.setOpaque(true);
-            computerStyle.setBackground(Color.GREEN);
             playerStyle.setOpaque(false);
+            computerStyle.setOpaque(true);
         } else {
-            playerStyle.setOpaque(true);
-            playerStyle.setBackground(Color.GREEN);
             computerStyle.setOpaque(false);
+            playerStyle.setOpaque(true);
         }
         pointsOfPlayer = 0;
         pointsOfComputer = 0;
@@ -37,7 +37,6 @@ public class Scoreboard extends JPanel {
                 else if (gameMatrix[x][y] == 0) pointsOfComputer++;
             }
         }
-
         playerStyle.setText("Player: " + pointsOfPlayer);
         computerStyle.setText("Computer: " + pointsOfComputer);
     }
