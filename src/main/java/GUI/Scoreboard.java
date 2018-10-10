@@ -13,7 +13,7 @@ public class Scoreboard extends JPanel {
         playerStyle = new JLabel("", JLabel.CENTER);
         playerStyle.setBackground(Color.GREEN);
         add(playerStyle);
-        JLabel nameOfGameStyle = new JLabel("Reversi");
+        JLabel nameOfGameStyle = new JLabel("          Reversi          ");
         nameOfGameStyle.setFont(new Font("Dialog", Font.BOLD | Font.PLAIN, 30));
         add(nameOfGameStyle);
         computerStyle = new JLabel("", JLabel.CENTER);

@@ -21,10 +21,10 @@ public class Update {
                     gameBoard[x][y].setBackground(Color.white);
                 } else if (matrix[x][y] == 2) {
                     gameBoard[x][y].setText("");
-                    gameBoard[x][y].setBackground(Color.green.darker());
+                    gameBoard[x][y].setBackground(Color.blue.darker());
                     gameBoard[x][y].setEnabled(false);
                 } else if (matrix[x][y] == 3) {
-                    gameBoard[x][y].setBackground(Color.yellow);
+                    gameBoard[x][y].setBackground(Color.green);
                     gameBoard[x][y].setFocusable(false);
                     gameBoard[x][y].setEnabled(true);
                     gameBoard[x][y].setText("");
