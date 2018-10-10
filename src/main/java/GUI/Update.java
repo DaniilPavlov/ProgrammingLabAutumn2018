@@ -1,11 +1,14 @@
-package main.java.logic;
+package main.java.GUI;
+
+
+import main.java.logic.Move;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-class Update {
-    void updatingOfGameBoard(int[][] matrix, JButton[][] gameBoard, HashMap<String, Move> moves) {
+public class Update {
+    public void updatingOfGameBoard(int[][] matrix, JButton[][] gameBoard, HashMap<String, Move> moves) {
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
                 if (matrix[x][y] == 0) {
@@ -27,7 +30,7 @@ class Update {
                     gameBoard[x][y].setEnabled(true);
                     gameBoard[x][y].setText("");
                     if (moves.get(x + "," + y) != null) {
-                        gameBoard[x][y].setText("" + moves.get(x + "," + y).mCount);
+                        gameBoard[x][y].setText(moves.get(x + "," + y).optionsCount + "");
                     }
                 }
             }
