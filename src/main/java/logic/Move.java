@@ -5,7 +5,7 @@ public class Move {
     int xOption;
     int yOption;
     public int counterOfOptions;
-    double rankOfOption = 0;
+    private double rankOfOption = 0;
 
     int[][] getDirections() {
         return optionsOfDirections;
@@ -25,11 +25,11 @@ public class Move {
         optionsOfDirections = directions;
     }
 
-    void addRank(int addition) {
+    void addScore(int addition) {
         rankOfOption += addition;
     }
 
-    double getRank() {
+    double getScore() {
         return rankOfOption;
     }
 
