@@ -2,8 +2,8 @@ package main.java.logic;
 
 import javax.swing.*;
 
-class GameBoardStructure {
-    void addStructureToGameBoard(JButton[][] gameBoard, int[][] matrix) {
+public class GameBoardStructure {
+    public void addStructureToGameBoard(JButton[][] gameBoard, int[][] matrix) {
         gameBoard[4][4].setEnabled(false);
         gameBoard[5][5].setEnabled(false);
         gameBoard[4][5].setEnabled(false);

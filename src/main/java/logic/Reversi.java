@@ -127,7 +127,7 @@ public class Reversi extends JPanel {
         }
     }
 
-    private Move choiceOfComputer(int[][] matrix, ArrayList<Move> moves, int numberOfTurn) {
+    public Move choiceOfComputer(int[][] matrix, ArrayList<Move> moves, int numberOfTurn) {
         int maxIndex = 0;
         ScoreAddition score = new ScoreAddition();
         if (moves.isEmpty())
@@ -198,7 +198,7 @@ public class Reversi extends JPanel {
         return moves;
     }
 
-    private boolean isBordersNear(int[][] matrix, int x, int y) {
+    public boolean isBordersNear(int[][] matrix, int x, int y) {
         if (matrix[x][y] == 1 || matrix[x][y] == 0)
             return false;
         else if (matrix[x - 1][y] == 1 || matrix[x - 1][y] == 0)
@@ -218,7 +218,7 @@ public class Reversi extends JPanel {
         else return matrix[x - 1][y + 1] == 1 || matrix[x - 1][y + 1] == 0;
     }
 
-    private int moveInThisDirection(int[][] matrix, int x, int y, int xDifference, int yDifference, int numberOfTurn, boolean flip) {
+    public int moveInThisDirection(int[][] matrix, int x, int y, int xDifference, int yDifference, int numberOfTurn, boolean flip) {
         int nextTurn;
         Animation animation = new Animation();
         int positionOfX = x;

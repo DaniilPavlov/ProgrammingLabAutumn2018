@@ -2,8 +2,8 @@ package main.java.logic;
 
 public class Move {
     private int[][] optionsOfDirections;
-    int xOption;
-    int yOption;
+    public int xOption;
+    public int yOption;
     public int counterOfFlips;
     private double scoreOfOption = 0;
 
@@ -19,7 +19,7 @@ public class Move {
         return false;
     }
 
-    Move(int[][] directions, int x, int y) {
+    public Move(int[][] directions, int x, int y) {
         xOption = x;
         yOption = y;
         optionsOfDirections = directions;
