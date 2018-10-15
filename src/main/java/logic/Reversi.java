@@ -17,17 +17,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Reversi extends JPanel {
-    private JButton[][] gameBoard;
-    private GameBoardStructure structure;
-    private int[][] matrix;
+    private int flipsCount = 0;
+    private int flagOfPossibilityMoving = 0;
     private int numberOfTurn = 1;
+    private Move computerMove;
+    private GameBoardStructure structure;
     private Scoreboard scoreboard;
     private Update update;
     private HashMap<String, Move> moves;
     private ArrayList<Move> listOfComputerMoves = new ArrayList<>();
-    private int count = 0;
-    private int flagOfPossibilityMoving = 0;
-    private Move computerMove;
+    private int[][] matrix;
+    private JButton[][] gameBoard;
 
     public Reversi() {
         setLayout(new BorderLayout());
@@ -43,7 +43,7 @@ public class Reversi extends JPanel {
         north.setLayout(new FlowLayout());
         add(south, BorderLayout.SOUTH);
         JButton reset = new JButton();
-        reset.addActionListener(new handlerOfResetGame());
+        reset.addActionListener(new HandlerOfResetGame());
         reset.setText("      Reset      ");
         south.add(reset, BorderLayout.SOUTH);
         gameBoard = new JButton[10][10];
@@ -53,7 +53,7 @@ public class Reversi extends JPanel {
             for (int column = 1; column < gameBoard[row].length - 1; column++) {
                 gameBoard[row][column] = new JButton();
                 gameBoard[row][column].setBackground(Color.blue.darker());
-                gameBoard[row][column].addActionListener(new handlerOfGameThread(row, column));
+                gameBoard[row][column].addActionListener(new HandlerOfGameThread(row, column));
                 gameGrid.add(gameBoard[row][column]);
             }
         }
@@ -90,7 +90,7 @@ public class Reversi extends JPanel {
             int[][] directions = moves.get(currentRow + "," + currentColumn).getDirections();
             for (int i = 0; i < directions.length; i++) {
                 if (directions[i][0] == 1)
-                    goDirection(matrix, currentRow, currentColumn, directions[i][1], directions[i][2],
+                    moveInThisDirection(matrix, currentRow, currentColumn, directions[i][1], directions[i][2],
                             numberOfTurn % 2, true);
             }
         } else {
@@ -110,10 +110,10 @@ public class Reversi extends JPanel {
         findPossibleMoves();
         if (flagOfPossibilityMoving == 2 || scoreboard.pointsOfPlayer == 0
                 || scoreboard.pointsOfComputer == 0) {
-            if (scoreboard.pointsOfPlayer > scoreboard.pointsOfComputer) {
-                resultOfTheGame(0);
-            } else
-                resultOfTheGame(1);
+            if (scoreboard.pointsOfPlayer > scoreboard.pointsOfComputer)
+                JOptionPane.showMessageDialog(this, "Player win!");
+            else
+                JOptionPane.showMessageDialog(this, "Computer win!");
             return;
         }
         if (numberOfTurn % 2 == 0 || moves.isEmpty()) {
@@ -128,12 +128,13 @@ public class Reversi extends JPanel {
     }
 
     private Move choiceOfComputer(int[][] matrix, ArrayList<Move> moves, int numberOfTurn) {
-        ScoreAddition score = new ScoreAddition();
         int maxIndex = 0;
-        if (moves.isEmpty()) return new Move(new int[8][3], -1, -1);
+        ScoreAddition score = new ScoreAddition();
+        if (moves.isEmpty())
+            return new Move(new int[8][3], -1, -1);
         for (int i = 0; i < moves.size(); i++) {
             Move move = moves.get(i);
-            move.addScore(move.counterOfOptions);
+            move.addScore(move.counterOfFlips);
             if (score.isCorner(move))
                 move.addScore(15);
             if (score.isTacticCorner(move, matrix, numberOfTurn))
@@ -159,35 +160,35 @@ public class Reversi extends JPanel {
             for (int y = 1; y < matrix[x].length - 1; y++) {
                 if (isBordersNear(matrix, x, y)) {
                     int[][] directions = new int[8][3];
-                    count = 0;
-                    directions[0][0] = goDirection(matrix, x, y, 1, 0, numberOfTurn, false);
+                    flipsCount = 0;
+                    directions[0][0] = moveInThisDirection(matrix, x, y, 1, 0, numberOfTurn, false);
                     directions[0][1] = 1;
                     directions[0][2] = 0;
-                    directions[1][0] = goDirection(matrix, x, y, 0, 1, numberOfTurn, false);
+                    directions[1][0] = moveInThisDirection(matrix, x, y, 0, 1, numberOfTurn, false);
                     directions[1][1] = 0;
                     directions[1][2] = 1;
-                    directions[2][0] = goDirection(matrix, x, y, 1, 1, numberOfTurn, false);
+                    directions[2][0] = moveInThisDirection(matrix, x, y, 1, 1, numberOfTurn, false);
                     directions[2][1] = 1;
                     directions[2][2] = 1;
-                    directions[3][0] = goDirection(matrix, x, y, -1, 0, numberOfTurn, false);
+                    directions[3][0] = moveInThisDirection(matrix, x, y, -1, 0, numberOfTurn, false);
                     directions[3][1] = -1;
                     directions[3][2] = 0;
-                    directions[4][0] = goDirection(matrix, x, y, 0, -1, numberOfTurn, false);
+                    directions[4][0] = moveInThisDirection(matrix, x, y, 0, -1, numberOfTurn, false);
                     directions[4][1] = 0;
                     directions[4][2] = -1;
-                    directions[5][0] = goDirection(matrix, x, y, -1, -1, numberOfTurn, false);
+                    directions[5][0] = moveInThisDirection(matrix, x, y, -1, -1, numberOfTurn, false);
                     directions[5][1] = -1;
                     directions[5][2] = -1;
-                    directions[6][0] = goDirection(matrix, x, y, 1, -1, numberOfTurn, false);
+                    directions[6][0] = moveInThisDirection(matrix, x, y, 1, -1, numberOfTurn, false);
                     directions[6][1] = 1;
                     directions[6][2] = -1;
-                    directions[7][0] = goDirection(matrix, x, y, -1, 1, numberOfTurn, false);
+                    directions[7][0] = moveInThisDirection(matrix, x, y, -1, 1, numberOfTurn, false);
                     directions[7][1] = -1;
                     directions[7][2] = 1;
                     Move move = new Move(directions, x, y);
                     if (move.isMove()) {
-                        move.setCount(count);
-                        count = 0;
+                        move.setCount(flipsCount);
+                        flipsCount = 0;
                         moves.put(x + "," + y, move);
                         listOfComputerMoves.add(move);
                     }
@@ -217,18 +218,17 @@ public class Reversi extends JPanel {
         else return matrix[x - 1][y + 1] == 1 || matrix[x - 1][y + 1] == 0;
     }
 
-    private int goDirection(int[][] matrix, int x, int y, int xDifference, int yDifference, int numberOfTurn, boolean flip) {
+    private int moveInThisDirection(int[][] matrix, int x, int y, int xDifference, int yDifference, int numberOfTurn, boolean flip) {
+        int nextTurn;
+        Animation animation = new Animation();
         int positionOfX = x;
         int positionOfY = y;
-        int nextTurn;
         int counterFlipsOfCurrentDirection = 0;
         if (numberOfTurn == 0)
             nextTurn = 1;
         else
             nextTurn = 0;
-        Animation animation;
         if (flip && this.matrix[x][y] != numberOfTurn) {
-            animation = new Animation();
             this.matrix[x][y] = numberOfTurn;
             animation.animationOfFlip(positionOfX, positionOfY, numberOfTurn, gameBoard);
         }
@@ -236,42 +236,34 @@ public class Reversi extends JPanel {
         positionOfY += yDifference;
         while (matrix[positionOfX][positionOfY] == nextTurn) {
             if (flip) {
-                animation = new Animation();
                 this.matrix[positionOfX][positionOfY] = numberOfTurn;
                 animation.animationOfFlip(positionOfX, positionOfY, numberOfTurn, gameBoard);
             }
+            counterFlipsOfCurrentDirection++;
             positionOfX += xDifference;
             positionOfY += yDifference;
-            counterFlipsOfCurrentDirection++;
         }
         if (matrix[positionOfX][positionOfY] == numberOfTurn && counterFlipsOfCurrentDirection > 0) {
-            count += counterFlipsOfCurrentDirection;
+            flipsCount += counterFlipsOfCurrentDirection;
             return 1;
         } else
             return 0;
     }
 
-    private void resultOfTheGame(int numberOfTurn) {
-        if (numberOfTurn == 0)
-            JOptionPane.showMessageDialog(this, "Player win!");
-        else
-            JOptionPane.showMessageDialog(this, "Computer win!");
-    }
-
-    private class handlerOfGameThread implements ActionListener {
+    private class HandlerOfGameThread implements ActionListener {
         private int currentRow, currentColumn;
+
+        HandlerOfGameThread(int row, int column) {
+            currentRow = row;
+            currentColumn = column;
+        }
 
         public void actionPerformed(ActionEvent e) {
             new Thread(() -> gameProcess(currentRow, currentColumn)).start();
         }
-
-        handlerOfGameThread(int row, int column) {
-            currentRow = row;
-            currentColumn = column;
-        }
     }
 
-    private class handlerOfResetGame implements ActionListener {
+    private class HandlerOfResetGame implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             structure.addStructureToGameBoard(gameBoard, matrix);
             findPossibleMoves();

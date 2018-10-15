@@ -29,7 +29,7 @@ public class Update {
                     gameBoard[x][y].setEnabled(true);
                     gameBoard[x][y].setText("");
                     if (moves.get(x + "," + y) != null) {
-                        gameBoard[x][y].setText(moves.get(x + "," + y).counterOfOptions + "");
+                        gameBoard[x][y].setText(moves.get(x + "," + y).counterOfFlips + "");
                     }
                 }
             }

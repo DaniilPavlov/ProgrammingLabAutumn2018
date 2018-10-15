@@ -4,8 +4,8 @@ public class Move {
     private int[][] optionsOfDirections;
     int xOption;
     int yOption;
-    public int counterOfOptions;
-    private double rankOfOption = 0;
+    public int counterOfFlips;
+    private double scoreOfOption = 0;
 
     int[][] getDirections() {
         return optionsOfDirections;
@@ -25,15 +25,15 @@ public class Move {
         optionsOfDirections = directions;
     }
 
-    void addScore(int addition) {
-        rankOfOption += addition;
+    void addScore(int score) {
+        scoreOfOption += score;
     }
 
     double getScore() {
-        return rankOfOption;
+        return scoreOfOption;
     }
 
-    void setCount(int count) {
-        counterOfOptions = count;
+    void setCount(int flipsCount) {
+        counterOfFlips = flipsCount;
     }
 }

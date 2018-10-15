@@ -33,8 +33,10 @@ public class Scoreboard extends JPanel {
         pointsOfComputer = 0;
         for (int x = 1; x < gameMatrix.length - 1; x++) {
             for (int y = 1; y < gameMatrix[x].length - 1; y++) {
-                if (gameMatrix[x][y] == 1) pointsOfPlayer++;
-                else if (gameMatrix[x][y] == 0) pointsOfComputer++;
+                if (gameMatrix[x][y] == 1)
+                    pointsOfPlayer++;
+                else if (gameMatrix[x][y] == 0)
+                    pointsOfComputer++;
             }
         }
         playerStyle.setText("Player: " + pointsOfPlayer);
