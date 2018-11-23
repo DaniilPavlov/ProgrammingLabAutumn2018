@@ -1,13 +1,14 @@
-import main.java.GUI.Animation;
+import main.java.GUI.Animate;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static main.java.logic.StatusOfCell.Status.*;
 
-class AnimationTest {
-    private Animation animation = new Animation();
+class AnimateTest {
+    private Animate animate = new Animate();
 
     @Test
     void AnimationBlackAndWhiteTest() {
@@ -18,9 +19,9 @@ class AnimationTest {
                 gameBoard[row][column].setBackground(Color.blue.darker());
             }
         }
-        animation.animationOfFlip(3, 3, 0, gameBoard);
+        animate.animationOfFlip(3, 3, COMPUTER, gameBoard);
         assertEquals(new Color(0, 0, 0), gameBoard[3][3].getBackground());
-        animation.animationOfFlip(7, 7, 1, gameBoard);
+        animate.animationOfFlip(7, 7, PLAYER, gameBoard);
         assertEquals(new Color(255, 255, 255), gameBoard[7][7].getBackground());
     }
 }

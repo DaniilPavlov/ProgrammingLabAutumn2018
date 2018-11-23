@@ -8,10 +8,11 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static main.java.logic.StatusOfCell.Status.*;
 
 class ScoreAdditionTest {
-    private int[][] optionsOfDirections;
-    private int[][] matrix = new int[10][10];
+    private Enum[][] optionsOfDirections;
+    private Enum[][] matrix = new Enum[10][10];
     private int x;
     private int y;
     private ScoreAddition scoreAddition = new ScoreAddition();
@@ -44,10 +45,10 @@ class ScoreAdditionTest {
             }
         }
         structure.addStructureToGameBoard(gameBoard, matrix);
-        matrix[1][3] = 1;
-        matrix[1][4] = 2;
-        matrix[1][5] = 1;
-        assertTrue(scoreAddition.isTacticCorner(move, matrix, 0));
+        matrix[1][3] = PLAYER;
+        matrix[1][4] = VACANT;
+        matrix[1][5] = PLAYER;
+        assertTrue(scoreAddition.isTacticBorder(move, matrix));
     }
 
     @Test
@@ -63,10 +64,10 @@ class ScoreAdditionTest {
             }
         }
         structure.addStructureToGameBoard(gameBoard, matrix);
-        matrix[1][3] = 0;
-        matrix[1][4] = 0;
-        matrix[1][5] = 2;
-        assertFalse(scoreAddition.isTacticCorner(move, matrix, 1));
+        matrix[1][3] = COMPUTER;
+        matrix[1][4] = COMPUTER;
+        matrix[1][5] = VACANT;
+        assertFalse(scoreAddition.isTacticBorder(move, matrix));
     }
 
     @Test
