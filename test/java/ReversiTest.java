@@ -1,3 +1,4 @@
+import main.java.logic.ComputerDecision;
 import main.java.logic.Move;
 import main.java.logic.Reversi;
 import org.junit.jupiter.api.Test;
@@ -51,10 +52,10 @@ class ReversiTest {
         gameMatrix[5][4] = COMPUTER;
         gameMatrix[4][3] = COMPUTER;
         gameMatrix[3][2] = PLAYER;
-        assertEquals(1, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1,
+        assertEquals(EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1,
                 PLAYER, false));
         gameMatrix[4][3] = VACANT;
-        assertEquals(0, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1,
+        assertEquals(NOT_EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1,
                 PLAYER, false));
     }
 
@@ -86,6 +87,6 @@ class ReversiTest {
         ArrayList<Move> moves = new ArrayList<>();
         moves.add(move1);
         moves.add(move2);
-        assertEquals(move2, reversi.choiceOfComputer(moves));
+        assertEquals(move2, ComputerDecision.choiceOfComputer(moves));
     }
 }

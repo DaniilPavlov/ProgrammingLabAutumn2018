@@ -36,7 +36,7 @@ public class Scoreboard extends JPanel {
     }
 
     public void changingVisualOfTurn(Enum statusOfTurn) {
-        if (statusOfTurn == PLAYER) {
+        if (statusOfTurn == COMPUTER) {
             playerStyle.setOpaque(false);
             computerStyle.setOpaque(true);
         } else {

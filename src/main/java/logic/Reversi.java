@@ -25,36 +25,31 @@ public class Reversi extends JPanel {
     private Enum turnStatus = PLAYER;
     private DirectionOfMoving direction = new DirectionOfMoving();
     private Move computerMove;
-    private GameBoardStructure structure;
+    private GameBoardStructure structure = new GameBoardStructure();
+    ;
     private Scoreboard scoreboard;
     private ScoreAddition score = new ScoreAddition();
-    private Update update;
+    private Update update = new Update();
     private HashMap<String, Move> moves;
     private ArrayList<Move> listOfComputerMoves = new ArrayList<>();
-    private Enum[][] matrix;
+    static Enum[][] matrix;
     private JButton[][] gameBoard;
-    private int[] moveDirection = new int[2];
 
     public Reversi() {
-        setLayout(new BorderLayout());
         JPanel gameGrid = new JPanel();
+        gameBoard = new JButton[10][10];
+        matrix = new Enum[10][10];
+        ourGameGrid(gameGrid);
+        northPanel();
+        southPanel();
+        structure.addStructureToGameBoard(gameBoard, matrix);
+        findPossibleMoves();
+    }
+
+    private void ourGameGrid(JPanel gameGrid) {
+        setLayout(new BorderLayout());
         gameGrid.setLayout(new GridLayout(8, 8));
         add(gameGrid, BorderLayout.CENTER);
-        JPanel north = new JPanel();
-        north.setLayout(new FlowLayout());
-        add(north, BorderLayout.NORTH);
-        scoreboard = new Scoreboard();
-        north.add(scoreboard);
-        JPanel south = new JPanel();
-        north.setLayout(new FlowLayout());
-        add(south, BorderLayout.SOUTH);
-        JButton reset = new JButton();
-        reset.addActionListener(new HandlerOfResetGame());
-        reset.setText("      Reset      ");
-        south.add(reset, BorderLayout.SOUTH);
-        gameBoard = new JButton[10][10];
-        update = new Update();
-        matrix = new Enum[10][10];
         for (int row = 1; row < gameBoard.length - 1; row++) {
             for (int column = 1; column < gameBoard[row].length - 1; column++) {
                 gameBoard[row][column] = new JButton();
@@ -63,9 +58,24 @@ public class Reversi extends JPanel {
                 gameGrid.add(gameBoard[row][column]);
             }
         }
-        structure = new GameBoardStructure();
-        structure.addStructureToGameBoard(gameBoard, matrix);
-        findPossibleMoves();
+    }
+
+    private void northPanel() {
+        JPanel north = new JPanel();
+        north.setLayout(new FlowLayout());
+        add(north, BorderLayout.NORTH);
+        scoreboard = new Scoreboard();
+        north.add(scoreboard);
+        north.setLayout(new FlowLayout());
+    }
+
+    private void southPanel() {
+        JPanel south = new JPanel();
+        add(south, BorderLayout.SOUTH);
+        JButton reset = new JButton();
+        reset.addActionListener(new HandlerOfResetGame());
+        reset.setText("      Reset      ");
+        south.add(reset, BorderLayout.SOUTH);
     }
 
     private void findPossibleMoves() {
@@ -97,7 +107,7 @@ public class Reversi extends JPanel {
             Enum[][] directions = moves.get(currentRow + "," + currentColumn).getDirections();
             for (int i = 0; i < directions.length; i++) {
                 if (directions[i][0] == EXIST) {
-                    moveDirection = direction.detectionOfDirection(directions[i][1]);
+                    int[] moveDirection = direction.detectionOfDirection(directions[i][1]);
                     moveInThisDirection(matrix, currentRow, currentColumn, moveDirection[0], moveDirection[1],
                             turnStatus, true);
                 }
@@ -134,35 +144,9 @@ public class Reversi extends JPanel {
                     gameBoard[x][y].setEnabled(false);
                 }
             }
-            computerMove = choiceOfComputer(listOfComputerMoves);
+            computerMove = ComputerDecision.choiceOfComputer(listOfComputerMoves);
             new Thread(() -> oneTurn(computerMove.xOption, computerMove.yOption)).start();
         }
-    }
-
-    public Move choiceOfComputer(ArrayList<Move> moves) {
-        int maxIndex = 0;
-        ScoreAddition score = new ScoreAddition();
-        if (moves.isEmpty())
-            return new Move(new Enum[8][3], -1, -1);
-        for (int i = 0; i < moves.size(); i++) {
-            Move move = moves.get(i);
-            move.addScore(move.counterOfFlips);
-            if (score.isCorner(move))
-                move.addScore(15);
-            if (score.isTacticBorder(move, matrix))
-                move.addScore(10);
-            if (score.isBorder(move))
-                move.addScore(5);
-            if (score.isBorderDangerous(move))
-                move.addScore(-6);
-            if (score.isCornerDangerous(move))
-                move.addScore(-12);
-        }
-        for (int i = 0; i < moves.size(); i++) {
-            if (moves.get(i).getScore() >= moves.get(maxIndex).getScore())
-                maxIndex = i;
-        }
-        return moves.get(maxIndex);
     }
 
     private HashMap<String, Move> searchForMoves(Enum turnStatus) {
