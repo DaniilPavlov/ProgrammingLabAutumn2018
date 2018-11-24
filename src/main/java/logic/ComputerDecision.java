@@ -22,10 +22,9 @@ public class ComputerDecision {
             if (score.isCornerDangerous(move))
                 move.addScore(-12);
         }
-        for (int i = 0; i < moves.size(); i++) {
+        for (int i = 0; i < moves.size(); i++)
             if (moves.get(i).getScore() >= moves.get(maxIndex).getScore())
                 maxIndex = i;
-        }
         return moves.get(maxIndex);
     }
 }

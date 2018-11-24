@@ -100,8 +100,9 @@ public class Reversi extends JPanel {
                 }
             }
             System.out.println("Player turn");
-        } else
+        } else {
             System.out.println("Computer turn");
+        }
         if (!moves.isEmpty()) {
             flagOfPossibilityMoving = 0;
             Enum[][] directions = moves.get(currentRow + "," + currentColumn).getDirections();
