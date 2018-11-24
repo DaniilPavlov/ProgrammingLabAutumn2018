@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,12 +27,11 @@ public class Reversi extends JPanel {
     private DirectionOfMoving direction = new DirectionOfMoving();
     private Move computerMove;
     private GameBoardStructure structure = new GameBoardStructure();
-    ;
     private Scoreboard scoreboard;
     private ScoreAddition score = new ScoreAddition();
     private Update update = new Update();
     private HashMap<String, Move> moves;
-    private ArrayList<Move> listOfComputerMoves = new ArrayList<>();
+    private List<Move> listOfComputerMoves = new ArrayList<>();
     static Enum[][] matrix;
     private JButton[][] gameBoard;
 
@@ -217,15 +217,15 @@ public class Reversi extends JPanel {
             nextTurn = PLAYER;
         else
             nextTurn = COMPUTER;
-        if (flip && this.matrix[x][y] != turnStatus) {
-            this.matrix[x][y] = turnStatus;
+        if (flip && Reversi.matrix[x][y] != turnStatus) {
+            Reversi.matrix[x][y] = turnStatus;
             animate.animationOfFlip(xPosition, yPosition, turnStatus, gameBoard);
         }
         xPosition += xDifference;
         yPosition += yDifference;
         while (matrix[xPosition][yPosition] == nextTurn) {
             if (flip) {
-                this.matrix[xPosition][yPosition] = turnStatus;
+                Reversi.matrix[xPosition][yPosition] = turnStatus;
                 animate.animationOfFlip(xPosition, yPosition, turnStatus, gameBoard);
             }
             counterFlipsOfCurrentDirection++;

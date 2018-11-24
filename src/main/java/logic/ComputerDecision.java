@@ -1,9 +1,9 @@
 package main.java.logic;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ComputerDecision {
-    public static Move choiceOfComputer(ArrayList<Move> moves) {
+    public static Move choiceOfComputer(List<Move> moves) {
         int maxIndex = 0;
         ScoreAddition score = new ScoreAddition();
         if (moves.isEmpty())
