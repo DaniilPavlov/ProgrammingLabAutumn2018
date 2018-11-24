@@ -6,39 +6,12 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static main.java.logic.StatusOfCell.Status.*;
 import static main.java.logic.DirectionOfMoving.Direction.*;
 
 
 class ReversiTest {
     private Reversi reversi = new Reversi();
-
-    @Test
-    void isBordersNearTest() {
-        Enum[][] gameMatrix = new Enum[10][10];
-        for (int x = 1; x < gameMatrix.length - 1; x++) {
-            for (int y = 1; y < gameMatrix[x].length - 1; y++) {
-                gameMatrix[x][y] = VACANT;
-            }
-        }
-        gameMatrix[1][2] = PLAYER;
-        gameMatrix[3][4] = COMPUTER;
-        gameMatrix[6][5] = COMPUTER;
-        gameMatrix[1][6] = PLAYER;
-        gameMatrix[5][2] = COMPUTER;
-        gameMatrix[3][5] = PLAYER;
-        gameMatrix[8][2] = PLAYER;
-        gameMatrix[8][3] = COMPUTER;
-        gameMatrix[8][4] = PLAYER;
-        assertTrue(reversi.isBordersNear(gameMatrix, 4, 2));
-        gameMatrix[3][4] = VACANT;
-        gameMatrix[3][5] = VACANT;
-        gameMatrix[1][6] = VACANT;
-        assertFalse(reversi.isBordersNear(gameMatrix, 3, 7));
-        assertFalse(reversi.isBordersNear(gameMatrix, 8, 4));
-    }
 
     @Test
     void moveInThisDirectionTest() {
@@ -52,11 +25,9 @@ class ReversiTest {
         gameMatrix[5][4] = COMPUTER;
         gameMatrix[4][3] = COMPUTER;
         gameMatrix[3][2] = PLAYER;
-        assertEquals(EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1,
-                PLAYER, false));
+        assertEquals(EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1, false));
         gameMatrix[4][3] = VACANT;
-        assertEquals(NOT_EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1,
-                PLAYER, false));
+        assertEquals(NOT_EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1, false));
     }
 
     @Test

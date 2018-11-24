@@ -79,7 +79,7 @@ public class Reversi extends JPanel {
     }
 
     private void findPossibleMoves() {
-        moves = searchForMoves(turnStatus);
+        moves = searchForMoves();
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
                 if (moves.get(x + "," + y) != null) {
@@ -94,25 +94,13 @@ public class Reversi extends JPanel {
 
     private void oneTurn(int currentRow, int currentColumn) {
         if (turnStatus == PLAYER) {
-            for (int x = 1; x < gameBoard.length - 1; x++) {
-                for (int y = 1; y < gameBoard[x].length - 1; y++) {
-                    gameBoard[x][y].setEnabled(false);
-                }
-            }
+            enableGameBoard();
             System.out.println("Player turn");
         } else {
             System.out.println("Computer turn");
         }
         if (!moves.isEmpty()) {
-            flagOfPossibilityMoving = 0;
-            Enum[][] directions = moves.get(currentRow + "," + currentColumn).getDirections();
-            for (int i = 0; i < directions.length; i++) {
-                if (directions[i][0] == EXIST) {
-                    int[] moveDirection = direction.detectionOfDirection(directions[i][1]);
-                    moveInThisDirection(matrix, currentRow, currentColumn, moveDirection[0], moveDirection[1],
-                            turnStatus, true);
-                }
-            }
+            computerTurn(currentRow, currentColumn);
         } else {
             flagOfPossibilityMoving++;
             if (turnStatus == PLAYER)
@@ -120,59 +108,78 @@ public class Reversi extends JPanel {
             else
                 System.out.println("Computer can't move");
         }
-        if (turnStatus == PLAYER)
-            turnStatus = COMPUTER;
-        else
-            turnStatus = PLAYER;
-        for (int x = 1; x < matrix.length - 1; x++) {
-            for (int y = 1; y < matrix[x].length - 1; y++) {
-                if (matrix[x][y] == POSSIBLE_MOVE)
-                    matrix[x][y] = VACANT;
+        turnStatus = swapTurn();
+        clearFromPossibleMoves();
+        findPossibleMoves();
+        if (isEndGame())
+            return;
+        if (turnStatus == COMPUTER || moves.isEmpty()) {
+            enableGameBoard();
+            computerMove = ComputerDecision.choiceOfComputer(listOfComputerMoves);
+            new Thread(() -> oneTurn(computerMove.xOption, computerMove.yOption)).start();
+        }
+    }
+
+    private void enableGameBoard() {
+        for (int x = 1; x < gameBoard.length - 1; x++)
+            for (int y = 1; y < gameBoard[x].length - 1; y++)
+                gameBoard[x][y].setEnabled(false);
+    }
+
+    private void computerTurn(int currentRow, int currentColumn) {
+        flagOfPossibilityMoving = 0;
+        Enum[][] directions = moves.get(currentRow + "," + currentColumn).getDirections();
+        for (int i = 0; i < directions.length; i++) {
+            if (directions[i][0] == EXIST) {
+                int[] moveDirection = direction.detectionOfDirection(directions[i][1]);
+                moveInThisDirection(matrix, currentRow, currentColumn,
+                        moveDirection[0], moveDirection[1], true);
             }
         }
-        findPossibleMoves();
+    }
+
+    private void clearFromPossibleMoves() {
+        for (int x = 1; x < matrix.length - 1; x++)
+            for (int y = 1; y < matrix[x].length - 1; y++)
+                if (matrix[x][y] == POSSIBLE_MOVE)
+                    matrix[x][y] = VACANT;
+    }
+
+    private boolean isEndGame() {
         if (flagOfPossibilityMoving == 2 || scoreboard.pointsOfPlayer == 0
                 || scoreboard.pointsOfComputer == 0) {
             if (scoreboard.pointsOfPlayer > scoreboard.pointsOfComputer)
                 JOptionPane.showMessageDialog(this, "Player win!");
             else
                 JOptionPane.showMessageDialog(this, "Computer win!");
-            return;
+            return true;
         }
-        if (turnStatus == COMPUTER || moves.isEmpty()) {
-            for (int x = 1; x < gameBoard.length - 1; x++) {
-                for (int y = 1; y < gameBoard[x].length - 1; y++) {
-                    gameBoard[x][y].setEnabled(false);
-                }
-            }
-            computerMove = ComputerDecision.choiceOfComputer(listOfComputerMoves);
-            new Thread(() -> oneTurn(computerMove.xOption, computerMove.yOption)).start();
-        }
+        return false;
     }
 
-    private HashMap<String, Move> searchForMoves(Enum turnStatus) {
+    private HashMap<String, Move> searchForMoves() {
         HashMap<String, Move> moves = new HashMap<>();
         listOfComputerMoves.clear();
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
-                if (isBordersNear(matrix, x, y)) {
+                if (matrix[x][y] != PLAYER && matrix[x][y] != COMPUTER) {
                     Enum[][] directions = new Enum[8][3];
                     flipsCount = 0;
-                    directions[0][0] = moveInThisDirection(matrix, x, y, 1, 0, turnStatus, false);
+                    directions[0][0] = moveInThisDirection(matrix, x, y, 1, 0, false);
                     directions[0][1] = EAST;
-                    directions[1][0] = moveInThisDirection(matrix, x, y, 0, 1, turnStatus, false);
+                    directions[1][0] = moveInThisDirection(matrix, x, y, 0, 1, false);
                     directions[1][1] = NORTH;
-                    directions[2][0] = moveInThisDirection(matrix, x, y, 1, 1, turnStatus, false);
+                    directions[2][0] = moveInThisDirection(matrix, x, y, 1, 1, false);
                     directions[2][1] = NORTH_EAST;
-                    directions[3][0] = moveInThisDirection(matrix, x, y, -1, 0, turnStatus, false);
+                    directions[3][0] = moveInThisDirection(matrix, x, y, -1, 0, false);
                     directions[3][1] = WEST;
-                    directions[4][0] = moveInThisDirection(matrix, x, y, 0, -1, turnStatus, false);
+                    directions[4][0] = moveInThisDirection(matrix, x, y, 0, -1, false);
                     directions[4][1] = SOUTH;
-                    directions[5][0] = moveInThisDirection(matrix, x, y, -1, -1, turnStatus, false);
+                    directions[5][0] = moveInThisDirection(matrix, x, y, -1, -1, false);
                     directions[5][1] = SOUTH_WEST;
-                    directions[6][0] = moveInThisDirection(matrix, x, y, 1, -1, turnStatus, false);
+                    directions[6][0] = moveInThisDirection(matrix, x, y, 1, -1, false);
                     directions[6][1] = SOUTH_EAST;
-                    directions[7][0] = moveInThisDirection(matrix, x, y, -1, 1, turnStatus, false);
+                    directions[7][0] = moveInThisDirection(matrix, x, y, -1, 1, false);
                     directions[7][1] = NORTH_WEST;
                     Move move = new Move(directions, x, y);
                     if (move.isMove()) {
@@ -187,46 +194,26 @@ public class Reversi extends JPanel {
         return moves;
     }
 
-    public boolean isBordersNear(Enum[][] matrix, int x, int y) {
-        if (matrix[x][y] == PLAYER || matrix[x][y] == COMPUTER)
-            return false;
-        else if (matrix[x - 1][y] == PLAYER || matrix[x - 1][y] == COMPUTER)
-            return true;
-        else if (matrix[x][y - 1] == PLAYER || matrix[x][y - 1] == COMPUTER)
-            return true;
-        else if (matrix[x - 1][y - 1] == PLAYER || matrix[x - 1][y - 1] == COMPUTER)
-            return true;
-        else if (matrix[x + 1][y] == PLAYER || matrix[x + 1][y] == COMPUTER)
-            return true;
-        else if (matrix[x][y + 1] == PLAYER || matrix[x][y + 1] == COMPUTER)
-            return true;
-        else if (matrix[x + 1][y + 1] == PLAYER || matrix[x + 1][y + 1] == COMPUTER)
-            return true;
-        else if (matrix[x + 1][y - 1] == PLAYER || matrix[x + 1][y - 1] == COMPUTER)
-            return true;
-        else return matrix[x - 1][y + 1] == PLAYER || matrix[x - 1][y + 1] == COMPUTER;
+    private Enum swapTurn() {
+        if (turnStatus == COMPUTER)
+            return PLAYER;
+        else
+            return COMPUTER;
     }
 
-    public Enum moveInThisDirection(Enum[][] matrix, int x, int y, int xDifference, int yDifference, Enum turnStatus, boolean flip) {
-        Enum nextTurn;
-        Animate animate = new Animate();
+    public Enum moveInThisDirection(Enum[][] matrix, int x, int y, int xDifference, int yDifference, boolean flip) {
         int xPosition = x;
         int yPosition = y;
         int counterFlipsOfCurrentDirection = 0;
-        if (turnStatus == COMPUTER)
-            nextTurn = PLAYER;
-        else
-            nextTurn = COMPUTER;
+        Enum nextTurn = swapTurn();
         if (flip && Reversi.matrix[x][y] != turnStatus) {
-            Reversi.matrix[x][y] = turnStatus;
-            animate.animationOfFlip(xPosition, yPosition, turnStatus, gameBoard);
+            doFlips(x, y);
         }
         xPosition += xDifference;
         yPosition += yDifference;
         while (matrix[xPosition][yPosition] == nextTurn) {
             if (flip) {
-                Reversi.matrix[xPosition][yPosition] = turnStatus;
-                animate.animationOfFlip(xPosition, yPosition, turnStatus, gameBoard);
+                doFlips(xPosition, yPosition);
             }
             counterFlipsOfCurrentDirection++;
             xPosition += xDifference;
@@ -237,6 +224,12 @@ public class Reversi extends JPanel {
             return EXIST;
         } else
             return NOT_EXIST;
+    }
+
+    private void doFlips(int x, int y) {
+        Animate animate = new Animate();
+        Reversi.matrix[x][y] = turnStatus;
+        animate.animationOfFlip(x, y, turnStatus, gameBoard);
     }
 
     private class HandlerOfGameThread implements ActionListener {
