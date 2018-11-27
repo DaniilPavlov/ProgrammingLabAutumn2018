@@ -39,13 +39,13 @@ public class Reversi extends JPanel {
         JPanel gameGrid = new JPanel();
         gameBoard = new JButton[10][10];
         matrix = new Enum[10][10];
-        ourGameGrid(gameGrid);
-        northPanel();
-        southPanel();
+        addOurGameGrid(gameGrid);
+        addNorthPanel();
+        addSouthPanel();
         addStructure();
     }
 
-    private void ourGameGrid(JPanel gameGrid) {
+    private void addOurGameGrid(JPanel gameGrid) {
         setLayout(new BorderLayout());
         gameGrid.setLayout(new GridLayout(8, 8));
         add(gameGrid, BorderLayout.CENTER);
@@ -59,7 +59,7 @@ public class Reversi extends JPanel {
         }
     }
 
-    private void northPanel() {
+    private void addNorthPanel() {
         JPanel north = new JPanel();
         north.setLayout(new FlowLayout());
         add(north, BorderLayout.NORTH);
@@ -68,7 +68,7 @@ public class Reversi extends JPanel {
         north.setLayout(new FlowLayout());
     }
 
-    private void southPanel() {
+    private void addSouthPanel() {
         JPanel south = new JPanel();
         add(south, BorderLayout.SOUTH);
         JButton reset = new JButton();
