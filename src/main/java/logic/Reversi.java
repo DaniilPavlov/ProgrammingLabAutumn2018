@@ -42,8 +42,7 @@ public class Reversi extends JPanel {
         ourGameGrid(gameGrid);
         northPanel();
         southPanel();
-        structure.addStructureToGameBoard(gameBoard, matrix);
-        findPossibleMoves();
+        addStructure();
     }
 
     private void ourGameGrid(JPanel gameGrid) {
@@ -232,6 +231,11 @@ public class Reversi extends JPanel {
         animate.animationOfFlip(x, y, turnStatus, gameBoard);
     }
 
+    private void addStructure() {
+        structure.addStructureToGameBoard(gameBoard, matrix);
+        findPossibleMoves();
+    }
+
     private class HandlerOfGameThread implements ActionListener {
         private int currentRow, currentColumn;
 
@@ -247,8 +251,7 @@ public class Reversi extends JPanel {
 
     private class HandlerOfResetGame implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            structure.addStructureToGameBoard(gameBoard, matrix);
-            findPossibleMoves();
+            addStructure();
         }
     }
 }
