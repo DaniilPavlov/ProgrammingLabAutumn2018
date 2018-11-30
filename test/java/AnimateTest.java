@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 
 class AnimateTest {
     private Animate animate = new Animate();

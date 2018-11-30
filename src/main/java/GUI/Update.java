@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 
 public class Update {
     public void updatingOfGameBoard(Enum[][] matrix, JButton[][] gameBoard, HashMap<String, Move> moves) {

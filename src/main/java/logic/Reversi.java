@@ -4,6 +4,8 @@ import main.java.GUI.Animate;
 import main.java.GUI.Scoreboard;
 import main.java.GUI.Update;
 
+import static main.java.logic.Reversi.Status.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -17,7 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import static main.java.logic.StatusOfCell.Status.*;
 import static main.java.logic.DirectionOfMoving.Direction.*;
 
 public class Reversi extends JPanel {
@@ -253,5 +254,13 @@ public class Reversi extends JPanel {
         public void actionPerformed(ActionEvent e) {
             addStructure();
         }
+    }
+
+    public enum Status {
+        COMPUTER,
+        PLAYER,
+        VACANT,
+        POSSIBLE_MOVE,
+        BOARD
     }
 }

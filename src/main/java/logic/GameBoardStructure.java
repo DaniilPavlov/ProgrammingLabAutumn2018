@@ -2,7 +2,7 @@ package main.java.logic;
 
 import javax.swing.*;
 
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 
 public class GameBoardStructure {
     public void addStructureToGameBoard(JButton[][] gameBoard, Enum[][] matrix) {

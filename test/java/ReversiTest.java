@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 import static main.java.logic.DirectionOfMoving.Direction.*;
 
 

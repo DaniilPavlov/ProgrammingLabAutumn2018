@@ -2,7 +2,7 @@ package main.java.logic;
 
 import main.java.GUI.Scoreboard;
 
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 
 public class ScoreAddition {
     public boolean isCorner(Move move) {

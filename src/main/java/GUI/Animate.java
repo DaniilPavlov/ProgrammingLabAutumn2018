@@ -3,7 +3,7 @@ package main.java.GUI;
 import javax.swing.*;
 import java.awt.*;
 
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 
 public class Animate {
     public void animationOfFlip(int xPosition, int yPosition, Enum turnStatus, JButton[][] gameBoard) {

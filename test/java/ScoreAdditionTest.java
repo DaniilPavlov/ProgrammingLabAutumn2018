@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static main.java.logic.StatusOfCell.Status.*;
+import static main.java.logic.Reversi.Status.*;
 
 class ScoreAdditionTest {
     private Enum[][] optionsOfDirections;
