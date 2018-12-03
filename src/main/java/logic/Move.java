@@ -3,27 +3,27 @@ package main.java.logic;
 import static main.java.logic.DirectionOfMoving.Direction.*;
 
 public class Move {
-    private Enum[][] optionsOfDirections;
-    public int xOption;
-    public int yOption;
+    private Enum[][] matrixOfPossibleDirections;
+    public int xMoveDecision;
+    public int yMoveDecision;
     public int counterOfFlips;
     private double scoreOfOption = 0;
 
     Enum[][] getDirections() {
-        return optionsOfDirections;
+        return matrixOfPossibleDirections;
     }
 
     boolean isMove() {
-        for (int x = 0; x < optionsOfDirections.length; x++)
-            if (optionsOfDirections[x][0] == EXIST)
+        for (int x = 0; x < matrixOfPossibleDirections.length; x++)
+            if (matrixOfPossibleDirections[x][0] == EXIST)
                 return true;
         return false;
     }
 
     public Move(Enum[][] directions, int x, int y) {
-        xOption = x;
-        yOption = y;
-        optionsOfDirections = directions;
+        xMoveDecision = x;
+        yMoveDecision = y;
+        matrixOfPossibleDirections = directions;
     }
 
     void addScore(int score) {

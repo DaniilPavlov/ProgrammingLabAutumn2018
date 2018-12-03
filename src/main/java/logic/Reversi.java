@@ -4,6 +4,7 @@ import main.java.GUI.Animate;
 import main.java.GUI.Scoreboard;
 import main.java.GUI.Update;
 
+import static java.util.logging.Logger.getLogger;
 import static main.java.logic.Reversi.Status.*;
 
 import java.awt.BorderLayout;
@@ -15,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
+
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,6 +25,7 @@ import javax.swing.JPanel;
 import static main.java.logic.DirectionOfMoving.Direction.*;
 
 public class Reversi extends JPanel {
+    private static final Logger logger = Logger.getLogger(Reversi.class.getName());
     private int flipsCount = 0;
     private int flagOfPossibilityMoving = 0;
     private Enum turnStatus = PLAYER;
@@ -31,7 +35,7 @@ public class Reversi extends JPanel {
     private Scoreboard scoreboard;
     private ScoreAddition score = new ScoreAddition();
     private Update update = new Update();
-    private HashMap<String, Move> moves;
+    private HashMap<String, Move> possibleMoves;
     private List<Move> listOfComputerMoves = new ArrayList<>();
     static Enum[][] matrix;
     private JButton[][] gameBoard;
@@ -79,15 +83,15 @@ public class Reversi extends JPanel {
     }
 
     private void findPossibleMoves() {
-        moves = searchForMoves();
+        possibleMoves = checkAllDirectionsForMoves();
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
-                if (moves.get(x + "," + y) != null) {
+                if (possibleMoves.containsKey(x + "," + y)) {
                     matrix[x][y] = POSSIBLE_MOVE;
                 }
             }
         }
-        update.updatingOfGameBoard(matrix, gameBoard, moves);
+        update.updatingOfGameBoard(matrix, gameBoard, possibleMoves);
         score.currentScore(matrix, scoreboard);
         scoreboard.changingVisualOfTurn(turnStatus);
     }
@@ -99,24 +103,24 @@ public class Reversi extends JPanel {
         } else {
             System.out.println("Computer turn");
         }
-        if (!moves.isEmpty()) {
+        if (!possibleMoves.isEmpty()) {
             computerTurn(currentRow, currentColumn);
         } else {
             flagOfPossibilityMoving++;
             if (turnStatus == PLAYER)
-                System.out.println("Player can't move");
+                logger.fine("Player can't move");
             else
-                System.out.println("Computer can't move");
+                logger.fine("Computer can't move");
         }
         turnStatus = swapTurn();
         clearFromPossibleMoves();
         findPossibleMoves();
         if (isEndGame())
             return;
-        if (turnStatus == COMPUTER || moves.isEmpty()) {
+        if ((turnStatus == COMPUTER || possibleMoves.isEmpty()) && (!listOfComputerMoves.isEmpty())) {
             enableGameBoard();
-            computerMove = ComputerDecision.choiceOfComputer(listOfComputerMoves);
-            new Thread(() -> oneTurn(computerMove.xOption, computerMove.yOption)).start();
+            computerMove = ComputerDecision.makeDecision(listOfComputerMoves);
+            new Thread(() -> oneTurn(computerMove.xMoveDecision, computerMove.yMoveDecision)).start();
         }
     }
 
@@ -128,10 +132,10 @@ public class Reversi extends JPanel {
 
     private void computerTurn(int currentRow, int currentColumn) {
         flagOfPossibilityMoving = 0;
-        Enum[][] directions = moves.get(currentRow + "," + currentColumn).getDirections();
+        Enum[][] directions = possibleMoves.get(currentRow + "," + currentColumn).getDirections();
         for (int i = 0; i < directions.length; i++) {
             if (directions[i][0] == EXIST) {
-                int[] moveDirection = direction.detectionOfDirection(directions[i][1]);
+                int[] moveDirection = direction.detectionOfDirectionToDelta(directions[i][1]);
                 moveInThisDirection(matrix, currentRow, currentColumn,
                         moveDirection[0], moveDirection[1], true);
             }
@@ -146,24 +150,28 @@ public class Reversi extends JPanel {
     }
 
     private boolean isEndGame() {
+        String winner;
         if (flagOfPossibilityMoving == 2 || scoreboard.pointsOfPlayer == 0
                 || scoreboard.pointsOfComputer == 0) {
-            if (scoreboard.pointsOfPlayer > scoreboard.pointsOfComputer)
-                JOptionPane.showMessageDialog(this, "Player win!");
-            else
-                JOptionPane.showMessageDialog(this, "Computer win!");
+            if (scoreboard.pointsOfPlayer > scoreboard.pointsOfComputer) {
+                winner = "Player win!";
+                JOptionPane.showMessageDialog(this, winner);
+            } else {
+                winner = "Computer win!";
+                JOptionPane.showMessageDialog(this, winner);
+            }
             return true;
         }
         return false;
     }
 
-    private HashMap<String, Move> searchForMoves() {
-        HashMap<String, Move> moves = new HashMap<>();
+    private HashMap<String, Move> checkAllDirectionsForMoves() {
+        HashMap<String, Move> currentMoves = new HashMap<>();
         listOfComputerMoves.clear();
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
                 if (matrix[x][y] != PLAYER && matrix[x][y] != COMPUTER) {
-                    Enum[][] directions = new Enum[8][3];
+                    Enum[][] directions = new Enum[8][2];
                     flipsCount = 0;
                     directions[0][0] = moveInThisDirection(matrix, x, y, 1, 0, false);
                     directions[0][1] = EAST;
@@ -185,13 +193,13 @@ public class Reversi extends JPanel {
                     if (move.isMove()) {
                         move.setCount(flipsCount);
                         flipsCount = 0;
-                        moves.put(x + "," + y, move);
+                        currentMoves.put(x + "," + y, move);
                         listOfComputerMoves.add(move);
                     }
                 }
             }
         }
-        return moves;
+        return currentMoves;
     }
 
     private Enum swapTurn() {
@@ -207,13 +215,13 @@ public class Reversi extends JPanel {
         int counterFlipsOfCurrentDirection = 0;
         Enum nextTurn = swapTurn();
         if (flip && Reversi.matrix[x][y] != turnStatus) {
-            doFlips(x, y);
+            doFlips(gameBoard[x][y], x, y);
         }
         xPosition += xDifference;
         yPosition += yDifference;
         while (matrix[xPosition][yPosition] == nextTurn) {
             if (flip) {
-                doFlips(xPosition, yPosition);
+                doFlips(gameBoard[xPosition][yPosition], xPosition, yPosition);
             }
             counterFlipsOfCurrentDirection++;
             xPosition += xDifference;
@@ -226,14 +234,14 @@ public class Reversi extends JPanel {
             return NOT_EXIST;
     }
 
-    private void doFlips(int x, int y) {
+    private void doFlips(JButton gameBoard, int x, int y) {
         Animate animate = new Animate();
         Reversi.matrix[x][y] = turnStatus;
-        animate.animationOfFlip(x, y, turnStatus, gameBoard);
+        animate.animationOfFlip(turnStatus, gameBoard);
     }
 
     private void addStructure() {
-        structure.addStructureToGameBoard(gameBoard, matrix);
+        structure.initializeGameBoard(gameBoard);
         findPossibleMoves();
     }
 

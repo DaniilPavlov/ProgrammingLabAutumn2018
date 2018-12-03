@@ -3,13 +3,13 @@ package main.java.logic;
 import java.util.List;
 
 public class ComputerDecision {
-    public static Move choiceOfComputer(List<Move> moves) {
+    public static Move makeDecision(List<Move> listOfComputerMoves) {
         int maxIndex = 0;
         ScoreAddition score = new ScoreAddition();
-        if (moves.isEmpty())
+        if (listOfComputerMoves.isEmpty())
             return new Move(new Enum[8][3], -1, -1);
-        for (int i = 0; i < moves.size(); i++) {
-            Move move = moves.get(i);
+        for (int i = 0; i < listOfComputerMoves.size(); i++) {
+            Move move = listOfComputerMoves.get(i);
             move.addScore(move.counterOfFlips);
             if (score.isCorner(move))
                 move.addScore(15);
@@ -22,9 +22,9 @@ public class ComputerDecision {
             if (score.isCornerDangerous(move))
                 move.addScore(-12);
         }
-        for (int i = 0; i < moves.size(); i++)
-            if (moves.get(i).getScore() >= moves.get(maxIndex).getScore())
+        for (int i = 0; i < listOfComputerMoves.size(); i++)
+            if (listOfComputerMoves.get(i).getScore() >= listOfComputerMoves.get(maxIndex).getScore())
                 maxIndex = i;
-        return moves.get(maxIndex);
+        return listOfComputerMoves.get(maxIndex);
     }
 }

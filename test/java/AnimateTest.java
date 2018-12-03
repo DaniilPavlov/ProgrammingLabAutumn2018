@@ -19,9 +19,9 @@ class AnimateTest {
                 gameBoard[row][column].setBackground(Color.blue.darker());
             }
         }
-        animate.animationOfFlip(3, 3, COMPUTER, gameBoard);
+        animate.animationOfFlip(COMPUTER, gameBoard[3][3]);
         assertEquals(new Color(0, 0, 0), gameBoard[3][3].getBackground());
-        animate.animationOfFlip(7, 7, PLAYER, gameBoard);
+        animate.animationOfFlip(PLAYER, gameBoard[7][7]);
         assertEquals(new Color(255, 255, 255), gameBoard[7][7].getBackground());
     }
 }

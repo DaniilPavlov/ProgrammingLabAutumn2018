@@ -14,7 +14,7 @@ public class DirectionOfMoving {
         NOT_EXIST
     }
 
-    int[] detectionOfDirection(Enum direction) {
+    int[] detectionOfDirectionToDelta(Enum direction) {
         int[] moveDirection = new int[2];
         if (direction == Direction.EAST) {
             moveDirection[0] = 1;

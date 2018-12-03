@@ -20,22 +20,22 @@ class ScoreAdditionTest {
 
     @Test
     void isCornerTestFalse() {
-        move.xOption = 2;
-        move.yOption = 2;
+        move.xMoveDecision = 2;
+        move.yMoveDecision = 2;
         assertFalse(scoreAddition.isCorner(move));
     }
 
     @Test
     void isCornerTestTrue() {
-        move.xOption = 1;
-        move.yOption = 1;
+        move.xMoveDecision = 1;
+        move.yMoveDecision = 1;
         assertTrue(scoreAddition.isCorner(move));
     }
 
     @Test
     void isTacticCornerTestTrue() {
-        move.xOption = 1;
-        move.yOption = 4;
+        move.xMoveDecision = 1;
+        move.yMoveDecision = 4;
         GameBoardStructure structure = new GameBoardStructure();
         JButton[][] gameBoard = new JButton[10][10];
         for (int row = 1; row < gameBoard.length - 1; row++) {
@@ -44,7 +44,7 @@ class ScoreAdditionTest {
                 gameBoard[row][column].setBackground(Color.blue.darker());
             }
         }
-        structure.addStructureToGameBoard(gameBoard, matrix);
+        structure.initializeGameBoard(gameBoard);
         matrix[1][3] = PLAYER;
         matrix[1][4] = VACANT;
         matrix[1][5] = PLAYER;
@@ -53,8 +53,8 @@ class ScoreAdditionTest {
 
     @Test
     void isTacticCornerTestFalse() {
-        move.xOption = 1;
-        move.yOption = 4;
+        move.xMoveDecision = 1;
+        move.yMoveDecision = 4;
         GameBoardStructure structure = new GameBoardStructure();
         JButton[][] gameBoard = new JButton[10][10];
         for (int row = 1; row < gameBoard.length - 1; row++) {
@@ -63,7 +63,7 @@ class ScoreAdditionTest {
                 gameBoard[row][column].setBackground(Color.blue.darker());
             }
         }
-        structure.addStructureToGameBoard(gameBoard, matrix);
+        structure.initializeGameBoard(gameBoard);
         matrix[1][3] = COMPUTER;
         matrix[1][4] = COMPUTER;
         matrix[1][5] = VACANT;
@@ -72,43 +72,43 @@ class ScoreAdditionTest {
 
     @Test
     void isBorderTestTrue() {
-        move.xOption = 1;
-        move.yOption = 5;
+        move.xMoveDecision = 1;
+        move.yMoveDecision = 5;
         assertTrue(scoreAddition.isBorder(move));
     }
 
     @Test
     void isBorderTestFalse() {
-        move.xOption = 2;
-        move.yOption = 5;
+        move.xMoveDecision = 2;
+        move.yMoveDecision = 5;
         assertFalse(scoreAddition.isBorder(move));
     }
 
     @Test
     void isBorderDangerousTestTrue() {
-        move.xOption = 3;
-        move.yOption = 7;
+        move.xMoveDecision = 3;
+        move.yMoveDecision = 7;
         assertTrue(scoreAddition.isBorderDangerous(move));
     }
 
     @Test
     void isBorderDangerousTestFalse() {
-        move.xOption = 3;
-        move.yOption = 6;
+        move.xMoveDecision = 3;
+        move.yMoveDecision = 6;
         assertFalse(scoreAddition.isBorderDangerous(move));
     }
 
     @Test
     void isisCornerDangerousTestTrue() {
-        move.xOption = 2;
-        move.yOption = 2;
+        move.xMoveDecision = 2;
+        move.yMoveDecision = 2;
         assertTrue(scoreAddition.isCornerDangerous(move));
     }
 
     @Test
     void isCornerDangerousFalse() {
-        move.xOption = 2;
-        move.yOption = 3;
+        move.xMoveDecision = 2;
+        move.yMoveDecision = 3;
         assertFalse(scoreAddition.isCornerDangerous(move));
     }
 }

@@ -58,6 +58,6 @@ class ReversiTest {
         ArrayList<Move> moves = new ArrayList<>();
         moves.add(move1);
         moves.add(move2);
-        assertEquals(move2, ComputerDecision.choiceOfComputer(moves));
+        assertEquals(move2, ComputerDecision.makeDecision(moves));
     }
 }

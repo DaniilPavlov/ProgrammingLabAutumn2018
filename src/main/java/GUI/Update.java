@@ -30,7 +30,7 @@ public class Update {
                     gameBoard[x][y].setFocusable(false);
                     gameBoard[x][y].setEnabled(true);
                     gameBoard[x][y].setText("");
-                    if (moves.get(x + "," + y) != null) {
+                    if (moves.containsKey(x + "," + y)) {
                         gameBoard[x][y].setText(moves.get(x + "," + y).counterOfFlips + "");
                     }
                 }
