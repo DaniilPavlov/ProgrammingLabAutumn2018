@@ -5,7 +5,6 @@ import java.awt.*;
 
 import static main.java.logic.Reversi.Status.*;
 
-
 public class Scoreboard extends JPanel {
     public int pointsOfComputer;
     public int pointsOfPlayer;

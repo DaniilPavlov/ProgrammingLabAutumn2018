@@ -4,7 +4,6 @@ import main.java.GUI.Animate;
 import main.java.GUI.Scoreboard;
 import main.java.GUI.Update;
 
-import static java.util.logging.Logger.getLogger;
 import static main.java.logic.Reversi.Status.*;
 
 import java.awt.BorderLayout;
