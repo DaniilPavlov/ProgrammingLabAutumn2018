@@ -1,3 +1,4 @@
+import main.java.logic.Direction;
 import main.java.logic.GameBoardStructure;
 import main.java.logic.Move;
 import main.java.logic.ScoreAddition;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static main.java.logic.Reversi.Status.*;
 
 class ScoreAdditionTest {
-    private Enum[][] optionsOfDirections;
+    private Direction[][] optionsOfDirections;
     private Enum[][] matrix = new Enum[10][10];
     private int x;
     private int y;

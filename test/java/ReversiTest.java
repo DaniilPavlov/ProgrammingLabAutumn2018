@@ -1,4 +1,5 @@
 import main.java.logic.ComputerDecision;
+import main.java.logic.Direction;
 import main.java.logic.Move;
 import main.java.logic.Reversi;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static main.java.logic.Reversi.Status.*;
-import static main.java.logic.DirectionOfMoving.Direction.*;
+import static main.java.logic.Direction.*;
 
 
 class ReversiTest {
@@ -15,7 +16,7 @@ class ReversiTest {
 
     @Test
     void moveInThisDirectionTest() {
-        Enum[][] gameMatrix = new Enum[10][10];
+        Reversi.Status[][] gameMatrix = new Reversi.Status[10][10];
         for (int x = 1; x < gameMatrix.length - 1; x++) {
             for (int y = 1; y < gameMatrix[x].length - 1; y++) {
                 gameMatrix[x][y] = VACANT;
@@ -45,7 +46,7 @@ class ReversiTest {
         gameMatrix[4][4] = COMPUTER;
         gameMatrix[5][5] = PLAYER;
         gameMatrix[4][5] = PLAYER;
-        Enum[][] directions = new Enum[3][2];
+        Direction[][] directions = new Direction[3][2];
         directions[0][0] = NOT_EXIST;
         directions[0][1] = EAST;
         directions[1][0] = EXIST;

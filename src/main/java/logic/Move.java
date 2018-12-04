@@ -1,15 +1,15 @@
 package main.java.logic;
 
-import static main.java.logic.DirectionOfMoving.Direction.*;
+import static main.java.logic.Direction.*;
 
 public class Move {
-    private Enum[][] matrixOfPossibleDirections;
+    private Direction[][] matrixOfPossibleDirections;
     public int xMoveDecision;
     public int yMoveDecision;
     public int counterOfFlips;
     private double scoreOfOption = 0;
 
-    Enum[][] getDirections() {
+    Direction[][] getDirections() {
         return matrixOfPossibleDirections;
     }
 
@@ -20,7 +20,7 @@ public class Move {
         return false;
     }
 
-    public Move(Enum[][] directions, int x, int y) {
+    public Move(Direction[][] directions, int x, int y) {
         xMoveDecision = x;
         yMoveDecision = y;
         matrixOfPossibleDirections = directions;

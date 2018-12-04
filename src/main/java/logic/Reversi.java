@@ -21,14 +21,16 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import static main.java.logic.DirectionOfMoving.Direction.*;
+import static main.java.logic.Direction.*;
 
 public class Reversi extends JPanel {
     private static final Logger logger = Logger.getLogger(Reversi.class.getName());
     private int flipsCount = 0;
     private int flagOfPossibilityMoving = 0;
-    private Enum turnStatus = PLAYER;
-    private DirectionOfMoving direction = new DirectionOfMoving();
+
+    public enum Status {COMPUTER, PLAYER, VACANT, POSSIBLE_MOVE}
+
+    private Status turnStatus = PLAYER;
     private Move computerMove;
     private GameBoardStructure structure = new GameBoardStructure();
     private Scoreboard scoreboard;
@@ -36,13 +38,13 @@ public class Reversi extends JPanel {
     private Update update = new Update();
     private HashMap<String, Move> possibleMoves;
     private List<Move> listOfComputerMoves = new ArrayList<>();
-    static Enum[][] matrix;
+    static Status[][] matrix;
     private JButton[][] gameBoard;
 
     public Reversi() {
         JPanel gameGrid = new JPanel();
         gameBoard = new JButton[10][10];
-        matrix = new Enum[10][10];
+        matrix = new Status[10][10];
         addOurGameGrid(gameGrid);
         addNorthPanel();
         addSouthPanel();
@@ -98,9 +100,9 @@ public class Reversi extends JPanel {
     private void oneTurn(int currentRow, int currentColumn) {
         if (turnStatus == PLAYER) {
             enableGameBoard();
-            System.out.println("Player turn");
+            logger.fine("Player turn");
         } else {
-            System.out.println("Computer turn");
+            logger.fine("Computer turn");
         }
         if (!possibleMoves.isEmpty()) {
             computerTurn(currentRow, currentColumn);
@@ -131,10 +133,10 @@ public class Reversi extends JPanel {
 
     private void computerTurn(int currentRow, int currentColumn) {
         flagOfPossibilityMoving = 0;
-        Enum[][] directions = possibleMoves.get(currentRow + "," + currentColumn).getDirections();
+        Direction[][] directions = possibleMoves.get(currentRow + "," + currentColumn).getDirections();
         for (int i = 0; i < directions.length; i++) {
             if (directions[i][0] == EXIST) {
-                int[] moveDirection = direction.detectionOfDirectionToDelta(directions[i][1]);
+                int[] moveDirection = Direction.detectionOfDirectionToDelta(directions[i][1]);
                 moveInThisDirection(matrix, currentRow, currentColumn,
                         moveDirection[0], moveDirection[1], true);
             }
@@ -170,7 +172,7 @@ public class Reversi extends JPanel {
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
                 if (matrix[x][y] != PLAYER && matrix[x][y] != COMPUTER) {
-                    Enum[][] directions = new Enum[8][2];
+                    Direction[][] directions = new Direction[8][2];
                     flipsCount = 0;
                     directions[0][0] = moveInThisDirection(matrix, x, y, 1, 0, false);
                     directions[0][1] = EAST;
@@ -201,18 +203,18 @@ public class Reversi extends JPanel {
         return currentMoves;
     }
 
-    private Enum swapTurn() {
+    private Status swapTurn() {
         if (turnStatus == COMPUTER)
             return PLAYER;
         else
             return COMPUTER;
     }
 
-    public Enum moveInThisDirection(Enum[][] matrix, int x, int y, int xDifference, int yDifference, boolean flip) {
+    public Direction moveInThisDirection(Status[][] matrix, int x, int y, int xDifference, int yDifference, boolean flip) {
         int xPosition = x;
         int yPosition = y;
         int counterFlipsOfCurrentDirection = 0;
-        Enum nextTurn = swapTurn();
+        Status nextTurn = swapTurn();
         if (flip && Reversi.matrix[x][y] != turnStatus) {
             doFlips(gameBoard[x][y], x, y);
         }
@@ -261,13 +263,5 @@ public class Reversi extends JPanel {
         public void actionPerformed(ActionEvent e) {
             addStructure();
         }
-    }
-
-    public enum Status {
-        COMPUTER,
-        PLAYER,
-        VACANT,
-        POSSIBLE_MOVE,
-        BOARD
     }
 }
