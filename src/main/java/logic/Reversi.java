@@ -27,9 +27,6 @@ public class Reversi extends JPanel {
     private static final Logger logger = Logger.getLogger(Reversi.class.getName());
     private int flipsCount = 0;
     private int flagOfPossibilityMoving = 0;
-
-    public enum Status {COMPUTER, PLAYER, VACANT, POSSIBLE_MOVE}
-
     private Status turnStatus = PLAYER;
     private Move computerMove;
     private GameBoardStructure structure = new GameBoardStructure();
@@ -40,6 +37,8 @@ public class Reversi extends JPanel {
     private List<Move> listOfComputerMoves = new ArrayList<>();
     static Status[][] matrix;
     private JButton[][] gameBoard;
+
+    public enum Status {COMPUTER, PLAYER, VACANT, POSSIBLE_MOVE}
 
     public Reversi() {
         JPanel gameGrid = new JPanel();
@@ -85,13 +84,10 @@ public class Reversi extends JPanel {
 
     private void findPossibleMoves() {
         possibleMoves = checkAllDirectionsForMoves();
-        for (int x = 1; x < matrix.length - 1; x++) {
-            for (int y = 1; y < matrix[x].length - 1; y++) {
-                if (possibleMoves.containsKey(x + "," + y)) {
+        for (int x = 1; x < matrix.length - 1; x++)
+            for (int y = 1; y < matrix[x].length - 1; y++)
+                if (possibleMoves.containsKey(x + "," + y))
                     matrix[x][y] = POSSIBLE_MOVE;
-                }
-            }
-        }
         update.updatingOfGameBoard(matrix, gameBoard, possibleMoves);
         score.currentScore(matrix, scoreboard);
         scoreboard.changingVisualOfTurn(turnStatus);
@@ -133,13 +129,10 @@ public class Reversi extends JPanel {
 
     private void computerTurn(int currentRow, int currentColumn) {
         flagOfPossibilityMoving = 0;
-        Direction[][] directions = possibleMoves.get(currentRow + "," + currentColumn).getDirections();
-        for (int i = 0; i < directions.length; i++) {
-            if (directions[i][0] == EXIST) {
-                int[] moveDirection = Direction.detectionOfDirectionToDelta(directions[i][1]);
-                moveInThisDirection(matrix, currentRow, currentColumn,
-                        moveDirection[0], moveDirection[1], true);
-            }
+        List<Direction> directions = possibleMoves.get(currentRow + "," + currentColumn).getDirections();
+        for (int i = 0; i < directions.size(); i++) {
+            int[] moveDirection = Direction.detectionOfDirectionToDelta(directions.get(i));
+            moveInThisDirection(matrix, currentRow, currentColumn, moveDirection[0], moveDirection[1], true);
         }
     }
 
@@ -172,26 +165,26 @@ public class Reversi extends JPanel {
         for (int x = 1; x < matrix.length - 1; x++) {
             for (int y = 1; y < matrix[x].length - 1; y++) {
                 if (matrix[x][y] != PLAYER && matrix[x][y] != COMPUTER) {
-                    Direction[][] directions = new Direction[8][2];
+                    List<Direction> directions = new ArrayList<>();
                     flipsCount = 0;
-                    directions[0][0] = moveInThisDirection(matrix, x, y, 1, 0, false);
-                    directions[0][1] = EAST;
-                    directions[1][0] = moveInThisDirection(matrix, x, y, 0, 1, false);
-                    directions[1][1] = NORTH;
-                    directions[2][0] = moveInThisDirection(matrix, x, y, 1, 1, false);
-                    directions[2][1] = NORTH_EAST;
-                    directions[3][0] = moveInThisDirection(matrix, x, y, -1, 0, false);
-                    directions[3][1] = WEST;
-                    directions[4][0] = moveInThisDirection(matrix, x, y, 0, -1, false);
-                    directions[4][1] = SOUTH;
-                    directions[5][0] = moveInThisDirection(matrix, x, y, -1, -1, false);
-                    directions[5][1] = SOUTH_WEST;
-                    directions[6][0] = moveInThisDirection(matrix, x, y, 1, -1, false);
-                    directions[6][1] = SOUTH_EAST;
-                    directions[7][0] = moveInThisDirection(matrix, x, y, -1, 1, false);
-                    directions[7][1] = NORTH_WEST;
+                    if (moveInThisDirection(matrix, x, y, 1, 0, false))
+                        directions.add(EAST);
+                    if (moveInThisDirection(matrix, x, y, 0, 1, false))
+                        directions.add(NORTH);
+                    if (moveInThisDirection(matrix, x, y, 1, 1, false))
+                        directions.add(NORTH_EAST);
+                    if (moveInThisDirection(matrix, x, y, -1, 0, false))
+                        directions.add(WEST);
+                    if (moveInThisDirection(matrix, x, y, 0, -1, false))
+                        directions.add(SOUTH);
+                    if (moveInThisDirection(matrix, x, y, -1, -1, false))
+                        directions.add(SOUTH_WEST);
+                    if (moveInThisDirection(matrix, x, y, 1, -1, false))
+                        directions.add(SOUTH_EAST);
+                    if (moveInThisDirection(matrix, x, y, -1, 1, false))
+                        directions.add(NORTH_WEST);
                     Move move = new Move(directions, x, y);
-                    if (move.isMove()) {
+                    if (move.isMovesExist()) {
                         move.setCount(flipsCount);
                         flipsCount = 0;
                         currentMoves.put(x + "," + y, move);
@@ -210,7 +203,7 @@ public class Reversi extends JPanel {
             return COMPUTER;
     }
 
-    public Direction moveInThisDirection(Status[][] matrix, int x, int y, int xDifference, int yDifference, boolean flip) {
+    public boolean moveInThisDirection(Status[][] matrix, int x, int y, int xDifference, int yDifference, boolean flip) {
         int xPosition = x;
         int yPosition = y;
         int counterFlipsOfCurrentDirection = 0;
@@ -230,9 +223,9 @@ public class Reversi extends JPanel {
         }
         if (matrix[xPosition][yPosition] == turnStatus && counterFlipsOfCurrentDirection > 0) {
             flipsCount += counterFlipsOfCurrentDirection;
-            return EXIST;
+            return true;
         } else
-            return NOT_EXIST;
+            return false;
     }
 
     private void doFlips(JButton gameBoard, int x, int y) {

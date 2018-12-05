@@ -1,6 +1,6 @@
 package main.java.logic;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComputerDecision {
@@ -8,7 +8,7 @@ public class ComputerDecision {
         int maxIndex = 0;
         ScoreAddition score = new ScoreAddition();
         if (listOfComputerMoves.isEmpty())
-            return new Move(new Direction[8][2], -1, -1);
+            return new Move(new ArrayList<Direction>(), -1, -1);
         for (int i = 0; i < listOfComputerMoves.size(); i++) {
             Move move = listOfComputerMoves.get(i);
             move.addScore(move.counterOfFlips);

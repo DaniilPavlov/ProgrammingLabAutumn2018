@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static main.java.logic.Reversi.Status.*;
 
 class ScoreAdditionTest {
-    private Direction[][] optionsOfDirections;
+    private ArrayList<Direction> optionsOfDirections;
     private Enum[][] matrix = new Enum[10][10];
     private int x;
     private int y;

@@ -5,6 +5,7 @@ import main.java.logic.Reversi;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static main.java.logic.Reversi.Status.*;
@@ -46,15 +47,11 @@ class ReversiTest {
         gameMatrix[4][4] = COMPUTER;
         gameMatrix[5][5] = PLAYER;
         gameMatrix[4][5] = PLAYER;
-        Direction[][] directions = new Direction[3][2];
-        directions[0][0] = NOT_EXIST;
-        directions[0][1] = EAST;
-        directions[1][0] = EXIST;
-        directions[1][1] = SOUTH;
-        directions[2][0] = EXIST;
-        directions[2][1] = NORTH_EAST;
+        List<Direction> directions = new ArrayList<Direction>();
+        directions.add(EAST);
+        directions.add(SOUTH);
+        directions.add(NORTH_EAST);
         Move move1 = new Move(directions, 3, 3);
-        directions[0][0] = EAST;
         Move move2 = new Move(directions, 6, 6);
         ArrayList<Move> moves = new ArrayList<>();
         moves.add(move1);

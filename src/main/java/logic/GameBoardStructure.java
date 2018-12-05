@@ -12,11 +12,9 @@ public class GameBoardStructure {
     }
 
     private void makeCellsVacant(Enum[][] matrix) {
-        for (int x = 0; x < matrix.length; x++) {
-            for (int y = 0; y < matrix[x].length; y++) {
+        for (int x = 0; x < matrix.length; x++)
+            for (int y = 0; y < matrix[x].length; y++)
                 matrix[x][y] = VACANT;
-            }
-        }
     }
 
     private void putStartCheckers(JButton[][] gameBoard) {

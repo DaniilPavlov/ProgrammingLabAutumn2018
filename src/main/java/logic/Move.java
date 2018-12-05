@@ -1,26 +1,23 @@
 package main.java.logic;
 
-import static main.java.logic.Direction.*;
+import java.util.List;
 
 public class Move {
-    private Direction[][] matrixOfPossibleDirections;
+    private List<Direction> matrixOfPossibleDirections;
     public int xMoveDecision;
     public int yMoveDecision;
     public int counterOfFlips;
     private double scoreOfOption = 0;
 
-    Direction[][] getDirections() {
+    List<Direction> getDirections() {
         return matrixOfPossibleDirections;
     }
 
-    boolean isMove() {
-        for (int x = 0; x < matrixOfPossibleDirections.length; x++)
-            if (matrixOfPossibleDirections[x][0] == EXIST)
-                return true;
-        return false;
+    boolean isMovesExist() {
+        return matrixOfPossibleDirections.size() != 0;
     }
 
-    public Move(Direction[][] directions, int x, int y) {
+    public Move(List<Direction> directions, int x, int y) {
         xMoveDecision = x;
         yMoveDecision = y;
         matrixOfPossibleDirections = directions;
