@@ -38,7 +38,6 @@ class ScoreAdditionTest {
     void isTacticCornerTestTrue() {
         move.xMoveDecision = 1;
         move.yMoveDecision = 4;
-        GameBoardStructure structure = new GameBoardStructure();
         JButton[][] gameBoard = new JButton[10][10];
         for (int row = 1; row < gameBoard.length - 1; row++) {
             for (int column = 1; column < gameBoard[row].length - 1; column++) {
@@ -46,7 +45,6 @@ class ScoreAdditionTest {
                 gameBoard[row][column].setBackground(Color.blue.darker());
             }
         }
-        structure.initializeGameBoard(gameBoard);
         matrix[1][3] = PLAYER;
         matrix[1][4] = VACANT;
         matrix[1][5] = PLAYER;
@@ -57,7 +55,6 @@ class ScoreAdditionTest {
     void isTacticCornerTestFalse() {
         move.xMoveDecision = 1;
         move.yMoveDecision = 4;
-        GameBoardStructure structure = new GameBoardStructure();
         JButton[][] gameBoard = new JButton[10][10];
         for (int row = 1; row < gameBoard.length - 1; row++) {
             for (int column = 1; column < gameBoard[row].length - 1; column++) {
@@ -65,7 +62,6 @@ class ScoreAdditionTest {
                 gameBoard[row][column].setBackground(Color.blue.darker());
             }
         }
-        structure.initializeGameBoard(gameBoard);
         matrix[1][3] = COMPUTER;
         matrix[1][4] = COMPUTER;
         matrix[1][5] = VACANT;

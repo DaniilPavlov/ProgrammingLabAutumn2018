@@ -16,7 +16,7 @@ class ReversiTest {
     private Reversi reversi = new Reversi();
 
     @Test
-    void moveInThisDirectionTest() {
+    void moveInThisDirectionTest1() {
         Reversi.Status[][] gameMatrix = new Reversi.Status[10][10];
         for (int x = 1; x < gameMatrix.length - 1; x++) {
             for (int y = 1; y < gameMatrix[x].length - 1; y++) {
@@ -27,9 +27,42 @@ class ReversiTest {
         gameMatrix[5][4] = COMPUTER;
         gameMatrix[4][3] = COMPUTER;
         gameMatrix[3][2] = PLAYER;
-        assertEquals(EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1, false));
+        assertEquals(true, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1, false));
         gameMatrix[4][3] = VACANT;
-        assertEquals(NOT_EXIST, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1, false));
+        assertEquals(false, reversi.moveInThisDirection(gameMatrix, 7, 6, -1, -1, false));
+    }
+
+    @Test
+    void moveInThisDirectionTest2() {
+        Reversi.Status[][] gameMatrix = new Reversi.Status[10][10];
+        for (int x = 1; x < gameMatrix.length - 1; x++) {
+            for (int y = 1; y < gameMatrix[x].length - 1; y++) {
+                gameMatrix[x][y] = VACANT;
+            }
+        }
+        gameMatrix[2][2] = COMPUTER;
+        gameMatrix[3][3] = COMPUTER;
+        gameMatrix[4][4] = COMPUTER;
+        gameMatrix[5][5] = PLAYER;
+        assertEquals(true, reversi.moveInThisDirection(gameMatrix, 1, 1, 1, 1, false));
+        gameMatrix[4][4] = PLAYER;
+        assertEquals(true, reversi.moveInThisDirection(gameMatrix, 1, 1, 1, 1, false));
+    }
+
+    @Test
+    void moveInThisDirectionTest3() {
+        Reversi.Status[][] gameMatrix = new Reversi.Status[10][10];
+        for (int x = 1; x < gameMatrix.length - 1; x++) {
+            for (int y = 1; y < gameMatrix[x].length - 1; y++) {
+                gameMatrix[x][y] = VACANT;
+            }
+        }
+        gameMatrix[6][6] = COMPUTER;
+        gameMatrix[6][5] = VACANT;
+        gameMatrix[6][4] = COMPUTER;
+        assertEquals(false, reversi.moveInThisDirection(gameMatrix, 6, 7, 0, -1, false));
+        gameMatrix[6][5] = PLAYER;
+        assertEquals(true, reversi.moveInThisDirection(gameMatrix, 6, 7, 0, -1, false));
     }
 
     @Test
